@@ -34,9 +34,6 @@
 			<th>Desciption</th>
 			<th>City</th>
 			<th>Category</th>
-			<th sec:authorize="isAuthenticated()">Mark done</th>
-			<th sec:authorize="isAuthenticated()">Delete</th>
-			<th sec:authorize="isAuthenticated()">Edit</th>
 		</tr>
 		<tr th:each="activity : ${activities}">
 			<td class="d-none" th:text="${activity.activityId}"></td>
@@ -45,12 +42,6 @@
 			<td th:text="${activity.desc}"></td>
 			<td th:text="${activity.city.name}"></td>
 			<td th:text="${activity.category.name}"></td>
-			<td sec:authorize="isAuthenticated()">
-				<a th:if="${activity.isCompleted == true}" th:href="@{/editcomplete/{id}(id=${activity.activityId})}"><i class="fas fa-check-square" style="color: green"></i></a>
-				<a th:unless="${activity.isCompleted == true}" th:href="@{/editcomplete/{id}(id=${activity.activityId})}"><i class="far fa-square" style="color: black"></i></a>
-			</td>
-			<td sec:authorize="isAuthenticated()"><a th:href="@{/delete/{id}(id=${activity.activityId})}"><i class="fas fa-trash" style="color: black"></i></a></td>
-			<td sec:authorize="isAuthenticated()"><a th:href="@{/edit/{id}(id=${activity.activityId})}"><i class="fas fa-edit" style="color: black"></i></a></td>
 		</tr>
 	</table>
 </body>
