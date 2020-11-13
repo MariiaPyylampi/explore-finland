@@ -1,5 +1,6 @@
 package swd20.exploreFinland.webcontroller;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,6 +19,8 @@ import swd20.exploreFinland.domain.Activity;
 import swd20.exploreFinland.domain.ActivityRepository;
 import swd20.exploreFinland.domain.CategoryRepository;
 import swd20.exploreFinland.domain.CityRepository;
+import swd20.exploreFinland.domain.User;
+import swd20.exploreFinland.domain.UserRepository;
 
 @Controller
 public class ActivityController {
@@ -28,6 +31,8 @@ public class ActivityController {
 	private CategoryRepository categoryRepository;
 	@Autowired
 	private CityRepository cityRepository;
+	@Autowired
+	private UserRepository userRepository;
 	
 	@GetMapping("/login")
 	public String login() {
@@ -40,20 +45,31 @@ public class ActivityController {
 		return "adventures";
 	}
 		
-	@GetMapping("adventures")
+	@GetMapping("/adventures")
 	public String getAdventures(Model model) {
 		model.addAttribute("activities", activityRepository.findAll());
 		return "adventures";
 	}
 	
+	@GetMapping("/useradventures")
+	public String getUserAdventures(Model model, Principal principal) {
+		String username = principal.getName();
+		User user = userRepository.findByUsername(username);
+		model.addAttribute("activities", activityRepository.findByUser(user));
+		model.addAttribute("cities", cityRepository.findAll());
+		model.addAttribute("categories", categoryRepository.findAll());
+		model.addAttribute("users", userRepository.findAll());
+		return "useradventures";
+	}
+	
 	//RESTful to get all activities
-	@GetMapping("activities")
+	@GetMapping("/activities")
 	public @ResponseBody List<Activity> activitiesRest() {
 		return (List<Activity>) activityRepository.findAll();
 	}
 	
 	//RESTful to get activity by id
-	@GetMapping("activities/{id}")
+	@GetMapping("/activities/{id}")
 	public @ResponseBody Optional<Activity> findActivityRest(@PathVariable("id") Long id) {
 		return activityRepository.findById(id);
 	}
@@ -67,21 +83,24 @@ public class ActivityController {
 	}
 		
 	@PostMapping("/saveactivity")
-	public String saveActivity(@Valid Activity activity, BindingResult bindingResult, Model model) {
+	public String saveActivity(@Valid Activity activity, BindingResult bindingResult, Model model, Principal principal) {
 		if (bindingResult.hasErrors()) {
 			model.addAttribute("categories", categoryRepository.findAll());
 			model.addAttribute("cities", cityRepository.findAll());
 			return "addActivity";
 		} else {
+			String username = principal.getName();
+			User user = userRepository.findByUsername(username);
+			activity.setUser(user);
 			activityRepository.save(activity);
-			return "redirect:adventures";
+			return "redirect:useradventures";
 		}
 	}
 	
 	@GetMapping("/delete/{id}")
 	public String deleteActivity(@PathVariable("id") Long id, Model model) {
 		activityRepository.deleteById(id);
-		return "redirect:../adventures";
+		return "redirect:../useradventures";
 	}
 	
 	@GetMapping("/edit/{id}")
@@ -95,9 +114,9 @@ public class ActivityController {
 	@GetMapping("/editcomplete/{id}")
 	public String completeActivity(@PathVariable("id") Long id) {
 		Activity activity = activityRepository.findById(id).orElse(null);
-		activity.setCompleted(!activity.getIsCompleted());
+		activity.setIsCompleted(!activity.getIsCompleted());
 		activityRepository.save(activity);
-		return "redirect:../adventures";
+		return "redirect:../useradventures";
 	}
 	
 	

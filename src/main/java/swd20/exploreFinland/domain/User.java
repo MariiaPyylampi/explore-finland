@@ -1,10 +1,16 @@
 package swd20.exploreFinland.domain;
 
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
 public class User {
@@ -22,6 +28,10 @@ public class User {
 	
 	@Column(name = "role", nullable = false)
 	private String role;
+	
+	@JsonBackReference
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user") // user onetomany activity
+	private List<Activity> activities;
 
 	public User() {
 		this.username = null;
@@ -50,6 +60,10 @@ public class User {
 	public String getRole() {
 		return role;
 	}
+	
+	public List<Activity> getActivities() {
+		return activities;
+	}
 
 	public void setId(Long id) {
 		this.id = id;
@@ -65,6 +79,10 @@ public class User {
 
 	public void setRole(String role) {
 		this.role = role;
+	}
+
+	public void setActivities(List<Activity> activities) {
+		this.activities = activities;
 	}
 	
 }

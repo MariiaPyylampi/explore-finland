@@ -9,4 +9,6 @@ public interface ActivityRepository extends CrudRepository<Activity, Long> {
 	List<Activity> findByName(String Name);
 	
 	List<Activity> findByIsCompleted(boolean isCompleted);
+	
+	List<Activity> findByUser(User user);
 }

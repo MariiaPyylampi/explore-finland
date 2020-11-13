@@ -61,10 +61,10 @@ public class ExploreFinlandApplication {
 			cityRepository.save(city3);			
 			
 			log.info("test data for Activities");
-			Activity activity1 = new Activity("Vapriikki", "Museokeskus Vapriikki - vuosisadan museo", false, category1, city1);
-			Activity activity2 = new Activity("Kaustinen Folk Music Festival", "Kansanmusiikkitapahtuma heinäkuussa 2021", true, category2, city2);
-			Activity activity3 = new Activity("Sompasauna", "Yleinen puusauna Kalasatamassa, auki 24/7", false, category3, city3);
-			Activity activity4 = new Activity("Ateneum", "Ateneum: Suomen taiteen tarina -näyttely", false, category1, city3);
+			Activity activity1 = new Activity("Vapriikki", "Museokeskus Vapriikki - vuosisadan museo", false, user1, category1, city1);
+			Activity activity2 = new Activity("Kaustinen Folk Music Festival", "Kansanmusiikkitapahtuma heinäkuussa 2021", true, user1, category2, city2);
+			Activity activity3 = new Activity("Sompasauna", "Yleinen puusauna Kalasatamassa, auki 24/7", false, user2, category3, city3);
+			Activity activity4 = new Activity("Ateneum", "Ateneum: Suomen taiteen tarina -näyttely", false, user2, category1, city3);
 			
 			activityRepository.save(activity1);
 			activityRepository.save(activity2);

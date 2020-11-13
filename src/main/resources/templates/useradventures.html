@@ -8,7 +8,6 @@
 <style>	body {margin: 20px;}</style>
 </head>
 <body>
-	<a sec:authorize="hasAuthority('ADMIN')" href="/useradventures" class="btn btn-outline-dark btn-sm">Back to admin view</a>
 	<div class="d-flex">
 		<div class="mr-auto p-2 ">
 			<h2>Welcome to Explore Finland!</h2>
@@ -26,12 +25,12 @@
 	  	</div>
 	</div>
 	<h4>Adventures</h4>
-	<table class="table table-striped">
+	<table sec:authorize="hasAuthority('USER')" class="table table-striped">
 		<tr>
 			<th class="d-none">ID</th>
-			<th sec:authorize="hasAuthority('ADMIN')">User</th>
 			<th>Activity</th>
 			<th>Desciption</th>
+			<th>User</th>
 			<th>City</th>
 			<th>Category</th>
 			<th sec:authorize="isAuthenticated()">Mark done</th>
@@ -40,9 +39,9 @@
 		</tr>
 		<tr th:each="activity : ${activities}">
 			<td class="d-none" th:text="${activity.activityId}"></td>
-			<td sec:authorize="hasAuthority('ADMIN')" th:text="${activity.user.username}"></td>
 			<td th:text="${activity.name}"></td>
 			<td th:text="${activity.desc}"></td>
+			<td th:text="${activity.user.username}"></td>
 			<td th:text="${activity.city.name}"></td>
 			<td th:text="${activity.category.name}"></td>
 			<td sec:authorize="isAuthenticated()">
@@ -53,5 +52,61 @@
 			<td sec:authorize="isAuthenticated()"><a th:href="@{/edit/{id}(id=${activity.activityId})}"><i class="fas fa-edit" style="color: black"></i></a></td>
 		</tr>
 	</table>
+	<div class="d-flex">
+		<div class="mr-auto p-2" sec:authorize="isAuthenticated()">
+	  		<a sec:authorize="hasAuthority('USER')" href="/addactivity" class="btn btn-outline-dark btn-sm">Add new activity</a>
+	  		<a sec:authorize="hasAuthority('ADMIN')" href="/adventures" class="btn btn-outline-dark btn-sm">List all activities</a>
+	  	</div>
+	  	<div class="p-2" sec:authorize="hasAuthority('ADMIN')">
+	  		<a href="/addcity" class="btn btn-outline-dark btn-sm">Add city</a>
+	  	</div>
+		<div class="p-2" sec:authorize="hasAuthority('ADMIN')">
+			<a href="/addcategory" class="btn btn-outline-dark btn-sm">Add category</a>
+		</div> 	
+	</div>
+	<br>
+	<div sec:authorize="hasAuthority('ADMIN')">
+		<h5>Cities</h5>
+		<table class="table table-striped">
+			<tr>
+				<th class="d-none">ID</th>
+				<th>City</th>
+				<th></th>
+			</tr>
+			<tr th:each="city : ${cities}">
+				<td class="d-none" th:text="${city.cityId}"></td>
+				<td th:text="${city.name}"></td>
+				<td><a th:href="@{/deletecity/{id}(id=${city.cityId})}"><i class="fas fa-trash" style="color: black"></i></a></td>
+			</tr>
+		</table>
+		<br>
+		<h5>Categories</h5>
+		<table class="table table-striped">
+			<tr>
+				<th class="d-none">ID</th>
+				<th>Category</th>
+				<th></th>
+			</tr>
+			<tr th:each="category : ${categories}">
+				<td class="d-none" th:text="${category.categoryId}"></td>
+				<td th:text="${category.name}"></td>
+				<td><a th:href="@{/deletecategory/{id}(id=${category.categoryId})}"><i class="fas fa-trash" style="color: black"></i></a></td>
+			</tr>
+		</table>
+		<br>
+		<h5>Users</h5>
+		<table class="table table-striped">
+			<tr>
+				<th class="d-none">ID</th>
+				<th>User</th>
+				<th>Role</th>
+			</tr>
+			<tr th:each="user : ${users}">
+				<td class="d-none" th:text="${user.id}"></td>
+				<td th:text="${user.username}"></td>
+				<td th:text="${user.role}"></td>
+			</tr>
+		</table>
+	</div>
 </body>
 </html>

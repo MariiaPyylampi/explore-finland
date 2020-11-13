@@ -23,7 +23,7 @@ public class Category {
 	private String name;
 	
 	@JsonBackReference
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "category") // category onetomay activity
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "category") // category onetomany activity
 	private List<Activity> activities;
 	
 	public Category() {

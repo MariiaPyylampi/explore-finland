@@ -50,8 +50,16 @@ public class CityController {
 			return "addCity";
 		} else {
 			cityRepository.save(city);
-			return "redirect:adventures";
+			return "redirect:useradventures";
 		}
 	}
+	
+	@GetMapping("/deletecity/{id}")
+	@PreAuthorize("hasAuthority('ADMIN')")
+	public String deleteCity(@PathVariable("id") Long id, Model model) {
+		cityRepository.deleteById(id);
+		return "redirect:../useradventures";
+	}
+	
 	
 }

@@ -50,8 +50,15 @@ public class CategoryController {
 			return "addCategory";
 		} else {
 			categoryRepository.save(category);
-			return ("redirect:adventures");
+			return ("redirect:useradventures");
 		}
+	}
+	
+	@GetMapping("/deletecategory/{id}")
+	@PreAuthorize("hasAuthority('ADMIN')")
+	public String deleteCategory(@PathVariable("id") Long id, Model model) {
+		categoryRepository.deleteById(id);
+		return "redirect:../useradventures";
 	}
 
 }

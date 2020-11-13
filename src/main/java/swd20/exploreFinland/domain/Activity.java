@@ -15,12 +15,17 @@ public class Activity {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long id;
+	private Long activityId;
 	
 	@Size(min=5, max=30)
 	private String name;
 	private String desc;
 	private boolean isCompleted;
+	
+	@ManyToOne // activity many to one user
+	@JsonManagedReference
+	@JoinColumn(name = "id")
+	private User user;
 
 	@ManyToOne //activity many to one category
 	@JsonManagedReference //prevents endless loop
@@ -36,20 +41,22 @@ public class Activity {
 		this.name = null;
 		this.desc = null;
 		this.isCompleted = false;
+		this.user = null;
 		this.category = null;
 		this.city = null;
 	}
 	
-	public Activity(String name, String desc, boolean isCompleted, Category category, City city) {
+	public Activity(String name, String desc, boolean isCompleted, User user, Category category, City city) {
 		this.name = name;
 		this.desc = desc;
 		this.isCompleted = isCompleted;
+		this.user = user;
 		this.category = category;
 		this.city = city;
 	}
-
-	public Long getId() {
-		return id;
+	
+	public Long getActivityId() {
+		return activityId;
 	}
 
 	public String getName() {
@@ -63,6 +70,10 @@ public class Activity {
 	public boolean getIsCompleted() {
 		return isCompleted;
 	}
+	
+	public User getUser() {
+		return user;
+	}
 
 	public Category getCategory() {
 		return category;
@@ -71,9 +82,9 @@ public class Activity {
 	public City getCity() {
 		return city;
 	}
-
-	public void setId(Long id) {
-		this.id = id;
+	
+	public void setActivityId(Long activityId) {
+		this.activityId = activityId;
 	}
 
 	public void setName(String name) {
@@ -84,8 +95,12 @@ public class Activity {
 		this.desc = desc;
 	}
 
-	public void setCompleted(boolean isCompleted) {
+	public void setIsCompleted(boolean isCompleted) {
 		this.isCompleted = isCompleted;
+	}
+	
+	public void setUser(User user) {
+		this.user = user;
 	}
 
 	public void setCategory(Category category) {
@@ -98,8 +113,8 @@ public class Activity {
 
 	@Override
 	public String toString() {
-		return "Activity [id=" + id + ", name=" + name + ", desc=" + desc + ", isCompleted=" + isCompleted
-				+ ", category=" + category + ", city=" + city + "]";
+		return "Activity [activityId=" + activityId + ", name=" + name + ", desc=" + desc + ", isCompleted="
+				+ isCompleted + ", user=" + user + ", category=" + category + ", city=" + city + "]";
 	}
 
 }

@@ -36,15 +36,15 @@ public class ActivityRepositoryTest {
 	
 	@Test
 	public void createNewActivity() {
-		Activity activity = new Activity("Fiskarin Panimo", "Fiskarin Panimo & Noita Winery", false, null, null);
+		Activity activity = new Activity("Fiskarin Panimo", "Fiskarin Panimo & Noita Winery", false, null, null, null);
 		repository.save(activity);
-		assertThat(activity.getId()).isNotNull();
+		assertThat(activity.getActivityId()).isNotNull();
 	}
 	
 	@Test
 	public void deleteActivity() {
 		List<Activity> actitivities = repository.findByName("Ateneum");
-		repository.deleteById(actitivities.get(0).getId());
+		repository.deleteById(actitivities.get(0).getActivityId());
 		List<Activity> end = repository.findByName("Ateneum");
 		assertThat(end).hasSize(0);
 	}
