@@ -1,0 +1,65 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+<title>Explore Finland</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link type="text/css"rel="stylesheet" href="../css/bootstrap.min.css" th:href="@{../css/bootstrap.min.css}" />
+<link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" />
+<style>	body {margin: 20px;}</style>
+</head>
+<body>
+	<div class="d-flex">
+		<div class="mr-auto p-2 ">
+			<h2>Welcome to Explore Finland!</h2>
+		</div>
+	  	<div class="p-2">
+	  		<p sec:authorize="isAuthenticated()" th:inline="text">[[${#httpServletRequest.remoteUser}]] signed in</p>
+	  	</div>
+	  	<div class="p-2" sec:authorize="isAuthenticated()">
+		  	<form th:action="@{/logout}" method="post">
+				<input class="btn btn-outline-dark btn-sm" type="submit" value="Sign Out"/>
+			</form>
+	 	</div>
+	  	<div class="p-2" sec:authorize="!isAuthenticated()">
+	  		<a href="/login" class="btn btn-outline-dark btn-sm">Sign in</a>
+	  	</div>
+	</div>
+	<h4>Adventures</h4>
+	<table class="table table-striped">
+		<tr>
+			<th class="d-none">ID</th>
+			<th>Activity</th>
+			<th>Desciption</th>
+			<th>City</th>
+			<th>Category</th>
+			<th sec:authorize="isAuthenticated()">Mark done</th>
+			<th sec:authorize="isAuthenticated()">Delete</th>
+			<th sec:authorize="isAuthenticated()">Edit</th>
+		</tr>
+		<tr th:each="activity : ${activities}">
+			<td class="d-none" th:text="${activity.id}"></td>
+			<td th:text="${activity.name}"></td>
+			<td th:text="${activity.desc}"></td>
+			<td th:text="${activity.city.name}"></td>
+			<td th:text="${activity.category.name}"></td>
+			<td sec:authorize="isAuthenticated()">
+				<a th:if="${activity.isCompleted == true}" th:href="@{/editcomplete/{id}(id=${activity.id})}"><i class="fas fa-check-square" style="color: green"></i></a>
+				<a th:unless="${activity.isCompleted == true}" th:href="@{/editcomplete/{id}(id=${activity.id})}"><i class="far fa-square" style="color: black"></i></a>
+			</td>
+			<td sec:authorize="isAuthenticated()"><a th:href="@{/delete/{id}(id=${activity.id})}"><i class="fas fa-trash" style="color: black"></i></a></td>
+			<td sec:authorize="isAuthenticated()"><a th:href="@{/edit/{id}(id=${activity.id})}"><i class="fas fa-edit" style="color: black"></i></a></td>
+		</tr>
+	</table>
+	<div class="d-flex">
+		<div class="mr-auto p-2" sec:authorize="isAuthenticated()">
+	  		<a href="/addactivity" class="btn btn-outline-dark btn-sm">Add new activity</a>
+	  	</div>
+	  	<div class="p-2" sec:authorize="hasAuthority('ADMIN')">
+	  		<a href="/addcity" class="btn btn-outline-dark btn-sm">Add city</a>
+	  	</div>
+		<div class="p-2" sec:authorize="hasAuthority('ADMIN')">
+			<a href="/addcategory" class="btn btn-outline-dark btn-sm">Add category</a>
+		</div> 	
+	</div>
+</body>
+</html>

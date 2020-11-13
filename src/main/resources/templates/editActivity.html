@@ -1,0 +1,56 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Explore Finland</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link type="text/css"rel="stylesheet" href="../css/bootstrap.min.css" th:href="@{../css/bootstrap.min.css}" />
+<style>	body {margin: 20px;}</style>
+</head>
+<body>
+	<a href="/adventures" class="btn btn-outline-dark btn-sm" style="margin-bottom: 10px">Go back</a>
+	<h2>Edit Activity</h2>
+	<div>
+		<form th:object="${activity}" th:action="@{/saveactivity}" action="#" method="post">
+			<div class="form-group row, d-none" >
+			    <label for="id" class="col-sm-2 col-form-label">ID</label>
+			    <div class="col-sm-10">
+			    	<input type="text" class="form-control" id="id" th:field="*{id}" />
+			    </div>
+			</div>
+			<div class="form-group row">
+			    <label for="name" class="col-sm-2 col-form-label">Name</label>
+			    <div class="col-sm-10">
+			    	<input type="text" class="form-control" id="name" th:field="*{name}" />
+			    </div>
+			</div>
+			<div class="form-group row">
+			    <label for="description" class="col-sm-2 col-form-label">Description</label>
+			    <div class="col-sm-10">
+			    	<input type="text" class="form-control" id="description" th:field="*{desc}" />
+			    </div>
+			</div>
+			<div class="form-group row">
+				<label for="categorylist" class="col-sm-2 col-form-label">Category</label>
+				<div class="col-sm-10" >
+					<select id="categorylist" th:field="*{category}" class="form-control">
+						<option th:each="category: ${categories}"
+						th:value="${category.categoryId}"
+						th:text="${category.name}"></option>
+					</select>
+				</div>
+			</div>
+			<div class="form-group row">
+				<label for="citylistt" class="col-sm-2 col-form-label">City</label>
+				<div class="col-sm-10" >
+					<select id="citylist" th:field="*{city}" class="form-control">
+						<option th:each="city: ${cities}"
+						th:value="${city.cityId}"
+						th:text="${city.name}"></option>
+					</select>
+				</div>
+			</div>
+			<input type="submit" class="btn btn-success btn-sm" value="Save" /> <input type="reset" class="btn btn-danger btn-sm" value="Reset" />
+		</form>
+	</div>
+</body>
+</html>
