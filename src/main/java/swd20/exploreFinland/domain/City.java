@@ -8,6 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.PreRemove;
 import javax.validation.constraints.Size;
 
 
@@ -20,12 +21,17 @@ public class City {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long cityId;
 	
-	@Size(min=5, max=30)
+	@Size(min=2, max=30)
 	private String name;
 	
 	@JsonBackReference
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "city")
+	@OneToMany(cascade = CascadeType.PERSIST, mappedBy = "city")
 	private List<Activity> activities;
+	
+	@PreRemove
+	private void preRemove() {
+	   activities.forEach(activity -> activity.setCity(null));
+	}
 
 	public City() {
 		this.name = null;

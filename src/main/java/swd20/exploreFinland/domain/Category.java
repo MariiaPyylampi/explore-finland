@@ -8,6 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.PreRemove;
 import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -23,8 +24,13 @@ public class Category {
 	private String name;
 	
 	@JsonBackReference
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "category") // category onetomany activity
+	@OneToMany(cascade = CascadeType.PERSIST, mappedBy = "category") // category onetomany activity
 	private List<Activity> activities;
+	
+	@PreRemove
+	private void preRemove() {
+	   activities.forEach(activity -> activity.setCategory(null));
+	}
 	
 	public Category() {
 		this.name = null;

@@ -34,8 +34,10 @@
 			<td class="d-none" th:text="${activity.activityId}"></td>
 			<td th:text="${activity.name}"></td>
 			<td th:text="${activity.desc}"></td>
-			<td th:text="${activity.city.name}"></td>
-			<td th:text="${activity.category.name}"></td>
+			<td th:if="${activity.city} == null">not defined</td>
+			<td th:unless="${activity.city} == null" th:text="${activity.city.name}"></td>
+			<td th:if="${activity.category} == null">not defined</td>
+			<td th:unless="${activity.category} == null" th:text="${activity.category.name}"></td>
 		</tr>
 	</table>
 </body>
