@@ -37,6 +37,7 @@ public class CityController {
 	}
 	
 	@GetMapping("/addcity")
+	@PreAuthorize("isAuthenticated()")
 	public String addCity(Model model) {
 		model.addAttribute("city", new City());
 		return "addCity";
