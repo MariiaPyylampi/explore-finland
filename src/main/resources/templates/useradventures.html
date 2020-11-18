@@ -31,7 +31,6 @@
 			<th sec:authorize="hasAuthority('ADMIN')">User</th>
 			<th>Activity</th>
 			<th>Desciption</th>
-			<th>User</th>
 			<th>City</th>
 			<th>Category</th>
 			<th sec:authorize="hasAuthority('USER')">Mark done</th>
@@ -43,7 +42,6 @@
 				<td sec:authorize="hasAuthority('ADMIN')" th:text="${activity.user.username}"></td>
 			<td th:text="${activity.name}"></td>
 			<td th:text="${activity.desc}"></td>
-			<td th:text="${activity.user.username}"></td>
 			<td th:text="${activity.city.name}"></td>
 			<td th:text="${activity.category.name}"></td>
 			<td sec:authorize="hasAuthority('USER')">
