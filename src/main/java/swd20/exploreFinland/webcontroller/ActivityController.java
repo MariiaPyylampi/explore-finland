@@ -35,23 +35,38 @@ public class ActivityController {
 	@Autowired
 	private UserRepository userRepository;
 	
+	//RESTful to get all activities
+	@GetMapping("/activities")
+	public @ResponseBody List<Activity> activitiesRest() {
+		return (List<Activity>) activityRepository.findAll();
+	}
+		
+	//RESTful to get activity by id
+	@GetMapping("/activities/{id}")
+	public @ResponseBody Optional<Activity> findActivityRest(@PathVariable("id") Long id) {
+		return activityRepository.findById(id);
+	}
+		
 	@GetMapping("/login")
 	public String login() {
 		return "login";
 	}
 	
+	//näkymä kirjautumattomalle käyttäjälle
 	@GetMapping("/")
 	public String getAdventures1(Model model) {
 		model.addAttribute("activities", activityRepository.findAll());
 		return "adventures";
 	}
 		
+	//näkymä kirjautumattomalle käyttäjälle
 	@GetMapping("/adventures")
 	public String getAdventures(Model model) {
 		model.addAttribute("activities", activityRepository.findAll());
 		return "adventures";
 	}
 	
+	//käyttäjäkohtainen näkymä, eri näkymä USERille ja ADMINille
 	@GetMapping("/useradventures")
 	public String getUserAdventures(Model model, Principal principal) {
 		String username = principal.getName();
@@ -67,18 +82,7 @@ public class ActivityController {
 		return "useradventures";
 	}
 	
-	//RESTful to get all activities
-	@GetMapping("/activities")
-	public @ResponseBody List<Activity> activitiesRest() {
-		return (List<Activity>) activityRepository.findAll();
-	}
-	
-	//RESTful to get activity by id
-	@GetMapping("/activities/{id}")
-	public @ResponseBody Optional<Activity> findActivityRest(@PathVariable("id") Long id) {
-		return activityRepository.findById(id);
-	}
-	
+	//aktiviteetin lisäyslomake vain USERille
 	@GetMapping("/addactivity")
 	@PreAuthorize("hasAuthority('USER')")
 	public String getActivityForm(Model model) {
@@ -88,6 +92,8 @@ public class ActivityController {
 		return "addActivity";
 	}
 		
+	//uuden aktiviteetin tallennus vain USERille
+	//epävalidilla syötteellä palauttaa takaisin aktiviteetin lisäyslomakkeelle
 	@PostMapping("/savenewactivity")
 	@PreAuthorize("hasAuthority('USER')")
 	public String saveActivity(@Valid Activity activity, BindingResult bindingResult, Model model, Principal principal) {
@@ -104,6 +110,7 @@ public class ActivityController {
 		}
 	}
 	
+	//aktiviteetin poisto vain USERille
 	@GetMapping("/delete/{id}")
 	@PreAuthorize("hasAuthority('USER')")
 	public String deleteActivity(@PathVariable("id") Long id, Model model) {
@@ -111,6 +118,7 @@ public class ActivityController {
 		return "redirect:../useradventures";
 	}
 	
+	//aktiviteetin editointilomake vain USERille
 	@GetMapping("/edit/{id}")
 	@PreAuthorize("hasAuthority('USER')")
 	public String editActivity(@PathVariable("id") Long id, Model model) {
@@ -120,6 +128,8 @@ public class ActivityController {
 		return "editActivity";
 	}
 	
+	//muokatun aktiviteetin tallennus vain USERille
+	//epävalidilla syötteellä palauttaa takaisin aktiviteetin muokkauslomakkeelle
 	@PostMapping("/saveeditactivity")
 	@PreAuthorize("hasAuthority('USER')")
 	public String saveEditedActivity(@Valid Activity activity, BindingResult bindingResult, Model model, Principal principal) {
@@ -137,6 +147,7 @@ public class ActivityController {
 		}
 	}
 	
+	//aktiviteetin suoritusmerkinnän muokkaus vain USERille
 	@GetMapping("/editcomplete/{id}")
 	@PreAuthorize("hasAuthority('USER')")
 	public String completeActivity(@PathVariable("id") Long id) {

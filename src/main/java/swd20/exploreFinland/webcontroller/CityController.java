@@ -36,6 +36,7 @@ public class CityController {
 		return cityRepository.findById(id);
 	}
 	
+	//uuden kaupungin lisäyslomake, vain sisäänkirjautuneelle
 	@GetMapping("/addcity")
 	@PreAuthorize("isAuthenticated()")
 	public String addCity(Model model) {
@@ -43,6 +44,8 @@ public class CityController {
 		return "addCity";
 	}
 	
+	//uuden kaupungin tallennus, vain sisäänkirjautuneelle
+	//epävalidilla syötteellä palauttaa takaisin lisäyslomakkeelle
 	@PostMapping("/savecity")
 	@PreAuthorize("isAuthenticated()")
 	public String saveCity(@Valid City city, BindingResult bindingResult, Model model) {
@@ -54,6 +57,7 @@ public class CityController {
 		}
 	}
 	
+	//kaupungin poisto, vain ADMINille
 	@GetMapping("/deletecity/{id}")
 	@PreAuthorize("hasAuthority('ADMIN')")
 	public String deleteCity(@PathVariable("id") Long id, Model model) {
@@ -61,6 +65,7 @@ public class CityController {
 		return "redirect:../useradventures";
 	}
 	
+	//kaupungin muokkauslomake, vain ADMINille
 	@GetMapping("/editcity/{id}")
 	@PreAuthorize("hasAuthority('ADMIN')")
 	public String editCity(@PathVariable("id") Long id, Model model) {
@@ -68,6 +73,8 @@ public class CityController {
 		return "editCity";
 	}
 	
+	//muokatun kaupungin tallennus, vain ADMINille
+	//epävalidilla syötteellä palauttaa takaisin muokkauslomakkeelle
 	@PostMapping("/saveeditcity")
 	@PreAuthorize("hasAuthority('ADMIN')")
 	public String saveEditCity(@Valid City city, BindingResult bindingResult, Model model) {

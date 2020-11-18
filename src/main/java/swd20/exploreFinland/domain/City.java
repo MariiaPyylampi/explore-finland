@@ -25,9 +25,10 @@ public class City {
 	private String name;
 	
 	@JsonBackReference
-	@OneToMany(cascade = CascadeType.PERSIST, mappedBy = "city")
+	@OneToMany(cascade = CascadeType.PERSIST, mappedBy = "city") //city onetomany activities
 	private List<Activity> activities;
 	
+	//estää aktivitieetin poistumisen, jos city poistetaan ja asettaa kaupungin tilalle null-arvon
 	@PreRemove
 	private void preRemove() {
 	   activities.forEach(activity -> activity.setCity(null));

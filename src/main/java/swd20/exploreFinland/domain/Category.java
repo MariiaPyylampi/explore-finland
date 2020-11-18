@@ -27,6 +27,7 @@ public class Category {
 	@OneToMany(cascade = CascadeType.PERSIST, mappedBy = "category") // category onetomany activity
 	private List<Activity> activities;
 	
+	//estää aktivitieetin poistumisen, jos category poistetaan ja asettaa kategorian tilalle null-arvon
 	@PreRemove
 	private void preRemove() {
 	   activities.forEach(activity -> activity.setCategory(null));
