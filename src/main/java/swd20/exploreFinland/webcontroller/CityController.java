@@ -59,5 +59,23 @@ public class CityController {
 		return "redirect:../useradventures";
 	}
 	
+	@GetMapping("/editcity/{id}")
+	@PreAuthorize("hasAuthority('ADMIN')")
+	public String editCity(@PathVariable("id") Long id, Model model) {
+		model.addAttribute("city", cityRepository.findById(id));
+		return "editCity";
+	}
+	
+	@PostMapping("/saveeditcity")
+	public String saveEditCity(@Valid City city, BindingResult bindingResult, Model model) {
+		if (bindingResult.hasErrors()) {
+			model.addAttribute("city", city);
+			return "editCity";
+		} else {
+			cityRepository.save(city);
+			return "redirect:useradventures";
+		}
+	}
+	
 	
 }

@@ -24,12 +24,6 @@ public class CategoryController {
 	@Autowired
 	private CategoryRepository categoryRepository;
 	
-	@GetMapping("/addcategory")
-	public String addCategory(Model model) {
-		model.addAttribute("category", new Category());
-		return "addCategory";
-	}
-	
 	//RESTful
 	@GetMapping("categories")
 	public @ResponseBody List<Category> categoriesRest() {
@@ -42,13 +36,19 @@ public class CategoryController {
 		return categoryRepository.findById(id);
 	}
 	
+	@GetMapping("/addcategory")
+	public String addCategory(Model model) {
+		model.addAttribute("category", new Category());
+		return "addCategory";
+	}
+	
 	@PostMapping("/savecategory")
 	public String saveCategory(@Valid Category category, BindingResult bindingResult, Model model) {
 		if (bindingResult.hasErrors()) {
 			return "addCategory";
 		} else {
 			categoryRepository.save(category);
-			return ("redirect:useradventures");
+			return "redirect:useradventures";
 		}
 	}
 	
@@ -57,6 +57,23 @@ public class CategoryController {
 	public String deleteCategory(@PathVariable("id") Long id, Model model) {
 		categoryRepository.deleteById(id);
 		return "redirect:../useradventures";
+	}
+	
+	@GetMapping("/editcategory/{id}")
+	public String editCategory(@PathVariable("id") Long id, Model model) {
+		model.addAttribute("category", categoryRepository.findById(id));
+		return "editCategory";
+	}
+	
+	@PostMapping("/saveeditcategory")
+	public String saveeditCategory(@Valid Category category, BindingResult bindingResult, Model model) {
+		if (bindingResult.hasErrors()) {
+			model.addAttribute("category", category);
+			return "editCategory";
+		} else {
+			categoryRepository.save(category);
+			return "redirect:useradventures";
+		}
 	}
 
 }

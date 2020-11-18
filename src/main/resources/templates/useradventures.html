@@ -24,34 +24,36 @@
 	  		<a href="/login" class="btn btn-outline-dark btn-sm">Sign in</a>
 	  	</div>
 	</div>
-	<h4>Adventures</h4>
-	<table class="table table-striped">
-		<tr>
-			<th class="d-none">ID</th>
-			<th sec:authorize="hasAuthority('ADMIN')">User</th>
-			<th>Activity</th>
-			<th>Desciption</th>
-			<th>City</th>
-			<th>Category</th>
-			<th sec:authorize="hasAuthority('USER')">Mark done</th>
-			<th sec:authorize="hasAuthority('USER')">Delete</th>
-			<th sec:authorize="hasAuthority('USER')">Edit</th>
-		</tr>
-		<tr th:each="activity : ${activities}">
-			<td class="d-none" th:text="${activity.activityId}"></td>
+	<div>
+		<h4>Adventures</h4>
+		<table class="table table-striped">
+			<tr>
+				<th class="d-none">ID</th>
+				<th sec:authorize="hasAuthority('ADMIN')">User</th>
+				<th>Activity</th>
+				<th>Desciption</th>
+				<th>City</th>
+				<th>Category</th>
+				<th sec:authorize="hasAuthority('USER')">Mark done</th>
+				<th sec:authorize="hasAuthority('USER')">Delete</th>
+				<th sec:authorize="hasAuthority('USER')">Edit</th>
+			</tr>
+			<tr th:each="activity : ${activities}">
+				<td class="d-none" th:text="${activity.activityId}"></td>
 				<td sec:authorize="hasAuthority('ADMIN')" th:text="${activity.user.username}"></td>
-			<td th:text="${activity.name}"></td>
-			<td th:text="${activity.desc}"></td>
-			<td th:text="${activity.city.name}"></td>
-			<td th:text="${activity.category.name}"></td>
-			<td sec:authorize="hasAuthority('USER')">
-				<a th:if="${activity.isCompleted == true}" th:href="@{/editcomplete/{id}(id=${activity.activityId})}"><i class="fas fa-check-square" style="color: green"></i></a>
-				<a th:unless="${activity.isCompleted == true}" th:href="@{/editcomplete/{id}(id=${activity.activityId})}"><i class="far fa-square" style="color: black"></i></a>
-			</td>
-			<td sec:authorize="hasAuthority('USER')"><a th:href="@{/delete/{id}(id=${activity.activityId})}"><i class="fas fa-trash" style="color: black"></i></a></td>
-			<td sec:authorize="hasAuthority('USER')"><a th:href="@{/edit/{id}(id=${activity.activityId})}"><i class="fas fa-edit" style="color: black"></i></a></td>
-		</tr>
-	</table>
+				<td th:text="${activity.name}"></td>
+				<td th:text="${activity.desc}"></td>
+				<td th:text="${activity.city.name}"></td>
+				<td th:text="${activity.category.name}"></td>
+				<td sec:authorize="hasAuthority('USER')">
+					<a th:if="${activity.isCompleted == true}" th:href="@{/editcomplete/{id}(id=${activity.activityId})}"><i class="fas fa-check-square" style="color: green"></i></a>
+					<a th:unless="${activity.isCompleted == true}" th:href="@{/editcomplete/{id}(id=${activity.activityId})}"><i class="far fa-square" style="color: black"></i></a>
+				</td>
+				<td sec:authorize="hasAuthority('USER')"><a th:href="@{/delete/{id}(id=${activity.activityId})}"><i class="fas fa-trash" style="color: black"></i></a></td>
+				<td sec:authorize="hasAuthority('USER')"><a th:href="@{/edit/{id}(id=${activity.activityId})}"><i class="fas fa-edit" style="color: black"></i></a></td>
+			</tr>
+		</table>
+	</div>
 	<div class="d-flex">
 		<div class="mr-auto p-2" sec:authorize="hasAuthority('USER')">
 	  		<a sec:authorize="hasAuthority('USER')" href="/addactivity" class="btn btn-outline-dark btn-sm">Add new activity</a>
@@ -103,11 +105,13 @@
 				<th class="d-none">ID</th>
 				<th>User</th>
 				<th>Role</th>
+				<th></th>
 			</tr>
 			<tr th:each="user : ${users}">
 				<td class="d-none" th:text="${user.id}"></td>
 				<td th:text="${user.username}"></td>
 				<td th:text="${user.role}"></td>
+				<td></td>
 			</tr>
 		</table>
 	</div>
