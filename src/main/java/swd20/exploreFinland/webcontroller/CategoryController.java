@@ -25,10 +25,9 @@ public class CategoryController {
 	private CategoryRepository categoryRepository;
 	
 	@GetMapping("/addcategory")
-	@PreAuthorize("hasAuthority('ADMIN')")
 	public String addCategory(Model model) {
 		model.addAttribute("category", new Category());
-		return "/addCategory";
+		return "addCategory";
 	}
 	
 	//RESTful
@@ -44,7 +43,6 @@ public class CategoryController {
 	}
 	
 	@PostMapping("/savecategory")
-	@PreAuthorize("hasAuthority('ADMIN')")
 	public String saveCategory(@Valid Category category, BindingResult bindingResult, Model model) {
 		if (bindingResult.hasErrors()) {
 			return "addCategory";

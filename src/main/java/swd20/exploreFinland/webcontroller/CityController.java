@@ -24,13 +24,6 @@ public class CityController {
 	@Autowired
 	private CityRepository cityRepository;
 	
-	@GetMapping("/addcity")
-	@PreAuthorize("hasAuthority('ADMIN')")
-	public String addCity(Model model) {
-		model.addAttribute("city", new City());
-		return "addCity";
-	}
-	
 	//RESTful
 	@GetMapping("/cities")
 	public @ResponseBody List<City> citiesRest() {
@@ -43,8 +36,13 @@ public class CityController {
 		return cityRepository.findById(id);
 	}
 	
+	@GetMapping("/addcity")
+	public String addCity(Model model) {
+		model.addAttribute("city", new City());
+		return "addCity";
+	}
+	
 	@PostMapping("/savecity")
-	@PreAuthorize("hasAuthority('ADMIN')")
 	public String saveCity(@Valid City city, BindingResult bindingResult, Model model) {
 		if (bindingResult.hasErrors()) {
 			return "addCity";

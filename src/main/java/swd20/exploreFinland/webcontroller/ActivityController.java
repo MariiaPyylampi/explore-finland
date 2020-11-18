@@ -7,6 +7,7 @@ import java.util.Optional;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -39,7 +40,7 @@ public class ActivityController {
 		return "login";
 	}
 	
-	@GetMapping("/*")
+	@GetMapping("/")
 	public String getAdventures1(Model model) {
 		model.addAttribute("activities", activityRepository.findAll());
 		return "adventures";
@@ -55,7 +56,11 @@ public class ActivityController {
 	public String getUserAdventures(Model model, Principal principal) {
 		String username = principal.getName();
 		User user = userRepository.findByUsername(username);
-		model.addAttribute("activities", activityRepository.findByUser(user));
+		if (user.getRole() == "ADMIN") {
+			model.addAttribute("activities", activityRepository.findAll());
+		} else {
+			model.addAttribute("activities", activityRepository.findByUser(user));
+		}
 		model.addAttribute("cities", cityRepository.findAll());
 		model.addAttribute("categories", categoryRepository.findAll());
 		model.addAttribute("users", userRepository.findAll());
@@ -75,6 +80,7 @@ public class ActivityController {
 	}
 	
 	@GetMapping("/addactivity")
+	@PreAuthorize("hasAuthority('USER')")
 	public String getActivityForm(Model model) {
 		model.addAttribute("activity", new Activity());
 		model.addAttribute("categories", categoryRepository.findAll());
@@ -82,7 +88,8 @@ public class ActivityController {
 		return "addActivity";
 	}
 		
-	@PostMapping("/saveactivity")
+	@PostMapping("/savenewactivity")
+	@PreAuthorize("hasAuthority('USER')")
 	public String saveActivity(@Valid Activity activity, BindingResult bindingResult, Model model, Principal principal) {
 		if (bindingResult.hasErrors()) {
 			model.addAttribute("categories", categoryRepository.findAll());
@@ -98,12 +105,14 @@ public class ActivityController {
 	}
 	
 	@GetMapping("/delete/{id}")
+	@PreAuthorize("hasAuthority('USER')")
 	public String deleteActivity(@PathVariable("id") Long id, Model model) {
 		activityRepository.deleteById(id);
 		return "redirect:../useradventures";
 	}
 	
 	@GetMapping("/edit/{id}")
+	@PreAuthorize("hasAuthority('USER')")
 	public String editActivity(@PathVariable("id") Long id, Model model) {
 		model.addAttribute("activity", activityRepository.findById(id));
 		model.addAttribute("categories", categoryRepository.findAll());
@@ -111,7 +120,24 @@ public class ActivityController {
 		return "editActivity";
 	}
 	
+	@PostMapping("/saveeditactivity")
+	@PreAuthorize("hasAuthority('USER')")
+	public String saveEditedActivity(@Valid Activity activity, BindingResult bindingResult, Model model, Principal principal) {
+		if (bindingResult.hasErrors()) {
+			model.addAttribute("categories", categoryRepository.findAll());
+			model.addAttribute("cities", cityRepository.findAll());
+			return "redirect:/edit/" + activity.getActivityId();
+		} else {
+			String username = principal.getName();
+			User user = userRepository.findByUsername(username);
+			activity.setUser(user);
+			activityRepository.save(activity);
+			return "redirect:useradventures";
+		}
+	}
+	
 	@GetMapping("/editcomplete/{id}")
+	@PreAuthorize("hasAuthority('USER')")
 	public String completeActivity(@PathVariable("id") Long id) {
 		Activity activity = activityRepository.findById(id).orElse(null);
 		activity.setIsCompleted(!activity.getIsCompleted());

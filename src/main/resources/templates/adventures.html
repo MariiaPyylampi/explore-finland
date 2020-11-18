@@ -8,14 +8,10 @@
 <style>	body {margin: 20px;}</style>
 </head>
 <body>
-	<a sec:authorize="hasAuthority('ADMIN')" href="/useradventures" class="btn btn-outline-dark btn-sm">Back to admin view</a>
 	<div class="d-flex">
 		<div class="mr-auto p-2 ">
 			<h2>Welcome to Explore Finland!</h2>
 		</div>
-	  	<div class="p-2">
-	  		<p sec:authorize="isAuthenticated()" th:inline="text">[[${#httpServletRequest.remoteUser}]] signed in</p>
-	  	</div>
 	  	<div class="p-2" sec:authorize="isAuthenticated()">
 		  	<form th:action="@{/logout}" method="post">
 				<input class="btn btn-outline-dark btn-sm" type="submit" value="Sign Out"/>
@@ -29,7 +25,6 @@
 	<table class="table table-striped">
 		<tr>
 			<th class="d-none">ID</th>
-			<th sec:authorize="hasAuthority('ADMIN')">User</th>
 			<th>Activity</th>
 			<th>Desciption</th>
 			<th>City</th>
@@ -37,7 +32,6 @@
 		</tr>
 		<tr th:each="activity : ${activities}">
 			<td class="d-none" th:text="${activity.activityId}"></td>
-			<td sec:authorize="hasAuthority('ADMIN')" th:text="${activity.user.username}"></td>
 			<td th:text="${activity.name}"></td>
 			<td th:text="${activity.desc}"></td>
 			<td th:text="${activity.city.name}"></td>
