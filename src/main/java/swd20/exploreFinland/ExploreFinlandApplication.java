@@ -46,10 +46,12 @@ public class ExploreFinlandApplication {
 			Category category1 = new Category("Museot");
 			Category category2 = new Category("Tapahtumat");
 			Category category3 = new Category("Elämykset");
+			Category category4 = new Category("Muu");
 			
 			categoryRepository.save(category1);
 			categoryRepository.save(category2);
 			categoryRepository.save(category3);
+			categoryRepository.save(category4);
 			
 			log.info("test data for Cities");
 			City city1 = new City("Tampere");

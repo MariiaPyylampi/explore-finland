@@ -44,6 +44,7 @@ public class CityController {
 	}
 	
 	@PostMapping("/savecity")
+	@PreAuthorize("isAuthenticated()")
 	public String saveCity(@Valid City city, BindingResult bindingResult, Model model) {
 		if (bindingResult.hasErrors()) {
 			return "addCity";
@@ -68,6 +69,7 @@ public class CityController {
 	}
 	
 	@PostMapping("/saveeditcity")
+	@PreAuthorize("hasAuthority('ADMIN')")
 	public String saveEditCity(@Valid City city, BindingResult bindingResult, Model model) {
 		if (bindingResult.hasErrors()) {
 			model.addAttribute("city", city);

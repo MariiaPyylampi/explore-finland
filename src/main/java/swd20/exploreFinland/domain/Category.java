@@ -20,7 +20,7 @@ public class Category {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long categoryId;
 	
-	@Size(min=5, max=30)
+	@Size(min=3, max=30)
 	private String name;
 	
 	@JsonBackReference

@@ -37,12 +37,14 @@ public class CategoryController {
 	}
 	
 	@GetMapping("/addcategory")
+	@PreAuthorize("isAuthenticated()")
 	public String addCategory(Model model) {
 		model.addAttribute("category", new Category());
 		return "addCategory";
 	}
 	
 	@PostMapping("/savecategory")
+	@PreAuthorize("isAuthenticated()")
 	public String saveCategory(@Valid Category category, BindingResult bindingResult, Model model) {
 		if (bindingResult.hasErrors()) {
 			return "addCategory";
@@ -60,6 +62,7 @@ public class CategoryController {
 	}
 	
 	@GetMapping("/editcategory/{id}")
+	@PreAuthorize("isAuthenticated()")
 	public String editCategory(@PathVariable("id") Long id, Model model) {
 		model.addAttribute("category", categoryRepository.findById(id));
 		return "editCategory";
