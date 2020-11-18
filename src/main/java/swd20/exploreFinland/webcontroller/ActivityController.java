@@ -124,9 +124,10 @@ public class ActivityController {
 	@PreAuthorize("hasAuthority('USER')")
 	public String saveEditedActivity(@Valid Activity activity, BindingResult bindingResult, Model model, Principal principal) {
 		if (bindingResult.hasErrors()) {
+			model.addAttribute("activity", activity);
 			model.addAttribute("categories", categoryRepository.findAll());
 			model.addAttribute("cities", cityRepository.findAll());
-			return "redirect:/edit/" + activity.getActivityId();
+			return "editActivity";
 		} else {
 			String username = principal.getName();
 			User user = userRepository.findByUsername(username);
