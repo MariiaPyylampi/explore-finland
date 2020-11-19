@@ -57,10 +57,12 @@ public class ExploreFinlandApplication {
 			City city1 = new City("Tampere");
 			City city2 = new City("Kaustinen");
 			City city3 = new City("Helsinki");
+			//City city4 = new City("Muu");
 			
 			cityRepository.save(city1);
 			cityRepository.save(city2);
-			cityRepository.save(city3);			
+			cityRepository.save(city3);	
+			//cityRepository.save(city4);	
 			
 			log.info("test data for Activities");
 			Activity activity1 = new Activity("Vapriikki", "Museokeskus Vapriikki - vuosisadan museo", false, user1, category1, city1);

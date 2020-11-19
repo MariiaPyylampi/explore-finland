@@ -11,12 +11,11 @@ import javax.persistence.OneToMany;
 import javax.persistence.PreRemove;
 import javax.validation.constraints.Size;
 
-
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
 public class City {
-	
+		
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long cityId;
@@ -31,7 +30,7 @@ public class City {
 	//estää aktivitieetin poistumisen, jos city poistetaan ja asettaa kaupungin tilalle null-arvon
 	@PreRemove
 	private void preRemove() {
-	   activities.forEach(activity -> activity.setCity(null));
+		activities.forEach(activity -> activity.setCity(null));
 	}
 
 	public City() {
